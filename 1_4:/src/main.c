@@ -7,12 +7,20 @@ typedef struct vector {
 	int *values;
 }vector;
 
+typedef struct matrix{
+	int rows;
+	int cols;
+	int *values;
+}matrix;
+
 // init: inicializar vector
 vector init_vec(int);
 // mul: multiplicar vectores
 int dot_vec(vector, vector);
 // print_vec: escribir los valores
 void print_vec(vector);
+// sum_matrix: suma 2 matrices
+matrix sum_matrix(matrix, matrix);
 
 int main(int argc, char **argv) {
 	printf("Hello %s!\n", argv[1]);
@@ -54,6 +62,47 @@ int dot_vec(vector a, vector b) {
 		return answer;
 	} else {
 		error(1, 1, "Vectors not equal");
+		exit(1);
+	}
+}
+
+matrix sum_matrix(matrix a, matrix b){
+	if(a.cols == b.cols && a.rows == b.rows){
+		matrix ans = {
+			.cols = a.cols,
+			.rows = a.rows,
+			.values = malloc(sizeof(int)*a.cols*b.cols)
+		};
+		for(int i=0; i< a.cols*a.rows; i++){
+			ans.values[i] = a.values[i] + b.values[i];
+		}
+		//*(ans.values + a.cols*2 + 1) = 2; 
+		return ans;
+	} else{
+		exit(1);
+	}
+}
+
+matrix dot_matrix(matrix a, matrix b){
+	if(a.cols == b.rows){
+		matrix ans = {
+			.rows = a.rows,
+			.cols = b.cols,
+			.values = malloc(sizeof(int)*a.rows*b.cols)
+		};
+		int rows = a.rows;
+		int cols = b.cols;
+		for(int i=0; i<rows; i++){
+			for(int j=0; j<cols; j++){
+				int acc = 0;
+				for(int pos=0; pos<cols; pos++){
+					acc += a.values[0] * b.values[0];
+				}
+				ans.values[cols*i+j] = acc;
+			}
+		}
+		return ans;
+	} else{
 		exit(1);
 	}
 }
